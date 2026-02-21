@@ -679,7 +679,7 @@ Your's 🐻‍❄️.<br></div>
         dateEl.innerText = `${day}-${month}-${year}`;
 
         // Unlock on Feb 23 (month=2, day=23) — set to 21 for testing
-        if (istNow.getMonth() === 1 && istNow.getDate() === 21) {
+        if (istNow.getMonth() === 1 && istNow.getDate() === 22) {
           if (!step1.classList.contains('hidden-step')) {
             goToStep(step1, step2);
             initFirecracker();
@@ -936,4 +936,5 @@ openBtn.addEventListener('click', ()=>{
   </script>
 </body>
 </html>
+
 
