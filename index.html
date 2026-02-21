@@ -21,6 +21,54 @@
       padding: 1rem;
       color: #f0e6f0;
       -webkit-font-smoothing: antialiased;
+      cursor: default;
+      overflow-x: hidden;
+    }
+
+    /* Click heart effect */
+    .click-heart {
+      position: fixed;
+      pointer-events: none;
+      z-index: 99999;
+      font-size: 2rem;
+      animation: heartFloat 1.5s ease-out forwards;
+      filter: drop-shadow(0 0 10px #ff69b4);
+    }
+
+    @keyframes heartFloat {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.5) rotate(0deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -150px) scale(1.5) rotate(20deg);
+      }
+    }
+
+    /* Firecracker pop effect */
+    .firecracker-pop {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      font-size: 3rem;
+      animation: crackerPop 0.8s ease-out forwards;
+      filter: drop-shadow(0 0 20px orange);
+    }
+
+    @keyframes crackerPop {
+      0% {
+        opacity: 1;
+        transform: scale(0.3) rotate(-10deg);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.5) rotate(10deg);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(2) rotate(20deg) translateY(-100px);
+      }
     }
 
     /* ---------- shared screen / step management ---------- */
@@ -28,10 +76,41 @@
       position: relative;
       width: 100%;
       max-width: 1000px;
-      transition: opacity 0.6s ease;
+      transition: opacity 0.8s ease, transform 0.8s ease;
     }
-    .hidden-step {
+    .step.hidden-step {
       display: none !important;
+    }
+
+    /* Page transition effects */
+    .step:not(.hidden-step) {
+      animation: pageReveal 0.8s ease-out;
+    }
+
+    @keyframes pageReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Button dynamic effects */
+    button {
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    }
+
+    button:active {
+      transform: scale(0.95) !important;
+      filter: brightness(1.2);
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
     }
 
     /* ---------- calendar screen ---------- */
@@ -101,6 +180,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
     }
     #fireCanvas {
       position: absolute;
@@ -122,7 +202,15 @@
       margin-bottom: 1rem;
       z-index: 2;
       position: relative;
+      text-shadow: 0 0 30px rgba(255,200,0,0.5);
+      animation: titlePulse 2s infinite;
     }
+
+    @keyframes titlePulse {
+      0%, 100% { transform: scale(1); text-shadow: 0 0 30px rgba(255,200,0,0.5); }
+      50% { transform: scale(1.05); text-shadow: 0 0 50px rgba(255,100,0,0.8); }
+    }
+
     .age-stats-fire {
       background: rgba(10, 5, 10, 0.7);
       backdrop-filter: blur(10px);
@@ -140,14 +228,28 @@
       position: relative;
       width: 90%;
       max-width: 600px;
+      animation: statsGlow 3s infinite;
     }
+
+    @keyframes statsGlow {
+      0%, 100% { box-shadow: 0 15px 30px -5px black, 0 0 30px rgba(255,200,0,0.3); }
+      50% { box-shadow: 0 15px 40px -5px black, 0 0 60px rgba(255,100,0,0.6); }
+    }
+
     .age-stats-fire div { margin: 0.2rem 0; }
     .age-highlight {
       font-size: 2rem;
       font-weight: 350;
       color: #ffb87a;
       margin-bottom: 0.8rem;
+      animation: highlightPulse 2s infinite;
     }
+
+    @keyframes highlightPulse {
+      0%, 100% { color: #ffb87a; }
+      50% { color: #ff6b6b; }
+    }
+
     .fire-next-btn {
       background: rgba(255,160,100,0.2);
       border: 2px solid #ffb27a;
@@ -160,7 +262,14 @@
       transition: 0.3s;
       z-index: 2;
       position: relative;
+      animation: buttonGlow 2s infinite;
     }
+
+    @keyframes buttonGlow {
+      0%, 100% { box-shadow: 0 0 20px #ffb27a; }
+      50% { box-shadow: 0 0 40px #ff6b6b; }
+    }
+
     .fire-next-btn:hover { background: #ff9633; transform:scale(1.05);}
 
     /* ---------- pig reveal ---------- */
@@ -171,7 +280,8 @@
       padding: 3rem 2rem;
       text-align: center;
     }
-    .pig-emojiBig { font-size: 8rem; animation: float 3s infinite; }
+    .pig-emojiBig { font-size: 8rem; animation: float 3s infinite; cursor: pointer; transition: transform 0.2s; }
+    .pig-emojiBig:active { transform: scale(0.9); }
     @keyframes float { 0%{transform:translateY(0);} 50%{transform:translateY(-15px);} }
     .pig-btn {
       background: rgba(255,240,255,0.15);
@@ -205,7 +315,10 @@
       justify-content: center;
       font-size: 5rem;
       border: 3px solid #dbb48b;
+      transition: transform 0.3s;
+      cursor: pointer;
     }
+    .gift-box:active { transform: scale(0.95); }
     .name-input {
       background: rgba(255,255,240,0.1);
       border: 2px solid #cb9e7a;
@@ -217,9 +330,16 @@
       color: white;
       text-align: center;
       margin: 1.5rem auto 0.5rem;
+      transition: all 0.3s;
+    }
+    .name-input:focus {
+      outline: none;
+      border-color: #ffb6f0;
+      box-shadow: 0 0 20px rgba(255,180,240,0.5);
+      transform: scale(1.02);
     }
     .hint-apple { font-size: 2.5rem; margin: 0.5rem; opacity: 0.7; }
-    .error-msg { color: #ff8888; min-height: 2rem; }
+    .error-msg { color: #ff8888; min-height: 2rem; font-size: 1.2rem; }
     .validate-btn {
       background: #b38b6b;
       border: none;
@@ -254,7 +374,9 @@
       border: 1px solid rgba(255,200,230,0.3);
       box-shadow: 0 15px 30px -8px black;
       flex-wrap: wrap;
+      transition: transform 0.3s;
     }
+    .music-placeholder-card:hover { transform: translateY(-5px); }
     .music-image {
       width: 70px;
       height: 70px;
@@ -263,7 +385,9 @@
       box-shadow: 0 8px 15px -3px black;
       flex-shrink: 0;
       border: 2px solid rgba(255,210,220,0.5);
+      transition: transform 0.3s;
     }
+    .music-image:hover { transform: scale(1.1); }
     .music-image img {
       width: 100%;
       height: 100%;
@@ -292,7 +416,9 @@
       border-radius: 30px;
       background: rgba(20, 10, 15, 0.8);
       margin-top: 12px;
+      transition: all 0.3s;
     }
+    #bgMusic:hover { transform: scale(1.02); box-shadow: 0 0 20px #ffb0e0; }
 
     /* Chrome/Safari styling */
     #bgMusic::-webkit-media-controls-panel {
@@ -322,7 +448,13 @@
       margin: 0 10px;
     }
 
-    /* carousel with images */
+    /* carousel with images - INFINITE LOOP */
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
     .carousel-mask {
       overflow: hidden;
       border-radius: 2rem;
@@ -337,7 +469,10 @@
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       padding: 1rem 0;
+      cursor: grab;
+      scroll-behavior: smooth;
     }
+    .carousel-track:active { cursor: grabbing; }
     .carousel-track::-webkit-scrollbar { display: none; }
     .carousel-item {
       flex: 0 0 auto;
@@ -347,16 +482,29 @@
       overflow: hidden;
       opacity: 0.6;
       transform: scale(0.88);
-      transition: 0.3s;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       box-shadow: 0 20px 30px -8px black;
+      cursor: pointer;
     }
-    .carousel-item.active-center { opacity: 1; transform: scale(1.1); filter: brightness(1.1); }
+    .carousel-item:hover {
+      transform: scale(0.95) !important;
+      filter: brightness(1.2);
+    }
+    .carousel-item:active { transform: scale(0.85) !important; }
+    .carousel-item.active-center { 
+      opacity: 1; 
+      transform: scale(1.1); 
+      filter: brightness(1.1);
+      box-shadow: 0 0 30px #ffb0e0;
+    }
     .carousel-item img {
       width: 100%;
       height: 280px;
       object-fit: cover;
       display: block;
+      transition: transform 0.3s;
     }
+    .carousel-item:hover img { transform: scale(1.1); }
     .carousel-nav { display: flex; gap: 1rem; justify-content: center; margin: 1rem; }
     .nav-btn {
       background: rgba(255,255,255,0.1);
@@ -368,121 +516,103 @@
       cursor: pointer;
     }
 
-   /* old paper letter - CLEAN VERSION (no scrollbar) */
-.letter-card {
-  background: #dac09a;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><filter id="noise" x="0%" y="0%" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.1"/></svg>');
-  background-blend-mode: overlay;
-  background-color: #e5cfb4;
-  border-radius: 3rem;
-  padding: 2rem;
-  box-shadow: 0 25px 40px -10px black, inset 0 0 40px #ffeedd;
-  border: 2px solid #b48b65;
-  color: #3e2e1c;
-  margin: 1.5rem 0;
-}
+    /* old paper letter */
+    .letter-card {
+      background: #dac09a;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><filter id="noise" x="0%" y="0%" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.1"/></svg>');
+      background-blend-mode: overlay;
+      background-color: #e5cfb4;
+      border-radius: 3rem;
+      padding: 2rem;
+      box-shadow: 0 25px 40px -10px black, inset 0 0 40px #ffeedd;
+      border: 2px solid #b48b65;
+      color: #3e2e1c;
+      margin: 1.5rem 0;
+      transition: all 0.3s;
+    }
+    .letter-card:hover { transform: translateY(-5px); box-shadow: 0 30px 50px -10px black; }
 
-.letter-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
+    .letter-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
 
-.envelope-symbol {
-  font-size: 2rem;
-  filter: drop-shadow(0 5px 6px #553e2a);
-  color: #5a3e28;
-}
+    .envelope-symbol {
+      font-size: 2rem;
+      filter: drop-shadow(0 5px 6px #553e2a);
+      color: #5a3e28;
+    }
 
-.btn-open {
-  background: #b38b5e;
-  border: none;
-  padding: 0.8rem 2rem;
-  border-radius: 3rem;
-  font-size: 1.3rem;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 5px 10px -3px rgba(0,0,0,0.3);
-}
+    .btn-open {
+      background: #b38b5e;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 3rem;
+      font-size: 1.3rem;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 10px -3px rgba(0,0,0,0.3);
+    }
 
-.btn-open:hover {
-  background: #9e7a52;
-  transform: scale(1.02);
-}
+    .btn-open:hover {
+      background: #9e7a52;
+      transform: scale(1.05);
+    }
 
-.message-reveal {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: max-height 1.2s cubic-bezier(0.4, 1, 0.3, 1), opacity 0.8s ease;
-  background: rgba(255,240,210,0.7);
-  border-radius: 2rem;
-  margin-top: 0;
-  width: 100%;
-}
+    .message-reveal {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 1.2s cubic-bezier(0.4, 1, 0.3, 1), opacity 0.8s ease;
+      background: rgba(255,240,210,0.7);
+      border-radius: 2rem;
+      margin-top: 0;
+      width: 100%;
+    }
 
-.message-reveal.show {
-  max-height: 2000px; /* Very large to fit all content */
-  opacity: 1;
-  margin-top: 2rem;
-  padding: 2rem;
-  overflow: visible; /* NO SCROLLBAR */
-}
+    .message-reveal.show {
+      max-height: 2000px;
+      opacity: 1;
+      margin-top: 2rem;
+      padding: 2rem;
+      overflow: visible;
+    }
 
-.love-text {
-  font-size: 1.4rem;
-  font-weight: 320;
-  color: #4b2e1a;
-  line-height: 1.8;
-  text-align: left;
-  white-space: normal;
-  word-wrap: break-word;
-  font-family: 'Georgia', 'Times New Roman', serif;
-  text-shadow: 0 1px 2px rgba(255,255,200,0.3);
-  letter-spacing: 0.3px;
-}
+    .love-text {
+      font-size: 1.4rem;
+      font-weight: 320;
+      color: #4b2e1a;
+      line-height: 1.8;
+      text-align: left;
+      white-space: normal;
+      word-wrap: break-word;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      text-shadow: 0 1px 2px rgba(255,255,200,0.3);
+      letter-spacing: 0.3px;
+    }
 
-.placeholder-sub {
-  font-size: 0.9rem;
-  color: #6b4d34;
-  margin-top: 2rem;
-  text-align: center;
-  opacity: 0.5;
-  border-top: 1px dashed #b48b65;
-  padding-top: 1rem;
-}
+    .placeholder-sub {
+      font-size: 0.9rem;
+      color: #6b4d34;
+      margin-top: 2rem;
+      text-align: center;
+      opacity: 0.5;
+      border-top: 1px dashed #b48b65;
+      padding-top: 1rem;
+    }
 
-/* For mobile */
-@media (max-width:700px) {
-  .love-text {
-    font-size: 1.2rem;
-    line-height: 1.6;
-  }
-  .message-reveal.show {
-    padding: 1.5rem;
-  }
-  .letter-card {
-    padding: 1.5rem;
-  }
-  .envelope-symbol {
-    font-size: 1.6rem;
-  }
-  .btn-open {
-    padding: 0.6rem 1.5rem;
-    font-size: 1.1rem;
-  }
-}
-    /* Memory pop-up styling */
+    /* Memory pop-up styling - INTERACTIVE */
     .memory-popup {
       position: fixed;
-      background: rgba(30, 20, 35, 0.9);
+      background: rgba(30, 20, 35, 0.95);
       backdrop-filter: blur(12px);
-      border: 2px solid rgba(255, 200, 220, 0.5);
+      border: 2px solid rgba(255, 200, 220, 0.6);
       border-radius: 3rem;
-      padding: 15px 25px;
+      padding: 12px 22px;
       color: #ffd9b3;
       font-family: 'Inter', sans-serif;
       font-size: 1.2rem;
@@ -490,15 +620,37 @@
       letter-spacing: 0.5px;
       box-shadow: 0 20px 40px -10px black, 0 0 40px rgba(255, 180, 210, 0.4);
       z-index: 10000;
-      pointer-events: none;
-      animation: floatUp 4s ease-out forwards;
-      max-width: 280px;
+      animation: floatPop 4s ease-out forwards;
+      max-width: min(350px, 80vw);
       text-align: center;
       line-height: 1.5;
-      white-space: nowrap;
+      white-space: normal;
+      word-wrap: break-word;
+      cursor: grab;
+      transition: all 0.2s;
+      user-select: none;
+      touch-action: none;
+      width: fit-content;
+      height: fit-content;
+      pointer-events: auto;
     }
 
-    @keyframes floatUp {
+    .memory-popup:active {
+      cursor: grabbing;
+      transform: scale(1.05) !important;
+      filter: brightness(1.2);
+      z-index: 10001;
+    }
+
+    .memory-popup.dragging {
+      opacity: 0.9;
+      transform: scale(1.1) !important;
+      transition: none;
+      z-index: 10002;
+      box-shadow: 0 30px 50px -10px black, 0 0 60px #ffb0e0;
+    }
+
+    @keyframes floatPop {
       0% {
         opacity: 0;
         transform: translateY(30px) scale(0.7);
@@ -525,12 +677,8 @@
       .music-placeholder-card { flex-direction: column; align-items: flex-start; }
       .music-image { width: 60px; height: 60px; }
       .music-song-name { font-size: 1.3rem; }
-      .memory-popup {
-        font-size: 1rem;
-        padding: 10px 18px;
-        white-space: normal;
-        max-width: 220px;
-      }
+      .memory-popup { font-size: 1rem; padding: 10px 18px; }
+      .love-text { font-size: 1.2rem; }
     }
   </style>
 </head>
@@ -599,32 +747,17 @@
       </div>
     </div>
 
-    <!-- carousel with your images (img1.jpg to img18.jpg) -->
-    <div class="carousel-mask">
-      <div class="carousel-track" id="carouselTrack">
-        <div class="carousel-item"><img src="img1.jpg" alt="memory 1" loading="lazy"></div>
-        <div class="carousel-item"><img src="img2.jpg" alt="memory 2" loading="lazy"></div>
-        <div class="carousel-item"><img src="img3.jpg" alt="memory 3" loading="lazy"></div>
-        <div class="carousel-item"><img src="img4.jpg" alt="memory 4" loading="lazy"></div>
-        <div class="carousel-item"><img src="img5.jpg" alt="memory 5" loading="lazy"></div>
-        <div class="carousel-item"><img src="img6.jpg" alt="memory 6" loading="lazy"></div>
-        <div class="carousel-item"><img src="img7.jpg" alt="memory 7" loading="lazy"></div>
-        <div class="carousel-item"><img src="img8.jpg" alt="memory 8" loading="lazy"></div>
-        <div class="carousel-item"><img src="img9.jpg" alt="memory 9" loading="lazy"></div>
-        <div class="carousel-item"><img src="img10.jpg" alt="memory 10" loading="lazy"></div>
-        <div class="carousel-item"><img src="img11.jpg" alt="memory 11" loading="lazy"></div>
-        <div class="carousel-item"><img src="img12.jpg" alt="memory 12" loading="lazy"></div>
-        <div class="carousel-item"><img src="img13.jpg" alt="memory 13" loading="lazy"></div>
-        <div class="carousel-item"><img src="img14.jpg" alt="memory 14" loading="lazy"></div>
-        <div class="carousel-item"><img src="img15.jpg" alt="memory 15" loading="lazy"></div>
-        <div class="carousel-item"><img src="img16.jpg" alt="memory 16" loading="lazy"></div>
-        <div class="carousel-item"><img src="img17.jpg" alt="memory 17" loading="lazy"></div>
-        <div class="carousel-item"><img src="img18.jpg" alt="memory 18" loading="lazy"></div>
+    <!-- carousel with your images (img1.jpg to img18.jpg) - INFINITE LOOP -->
+    <div class="carousel-container">
+      <div class="carousel-mask">
+        <div class="carousel-track" id="carouselTrack">
+          <!-- Images will be duplicated by JavaScript for infinite loop -->
+        </div>
       </div>
-    </div>
-    <div class="carousel-nav">
-      <button class="nav-btn" id="prevBtn">‹</button>
-      <button class="nav-btn" id="nextBtn">›</button>
+      <div class="carousel-nav">
+        <button class="nav-btn" id="prevBtn">‹</button>
+        <button class="nav-btn" id="nextBtn">›</button>
+      </div>
     </div>
 
     <!-- old paper letter -->
@@ -634,11 +767,11 @@
         <button class="btn-open" id="openLetterBtn">Open Letter</button>
       </div>
       <div class="message-reveal" id="letterMessage">
-        <div class="love-text">Oye bangaram 🐷,<br>
-It's been a year without you, but still edho recent gane manam school nunchi velinatu vundi neetho vunna memories alantivi, but sudden ga intha distance perigipothundi anukole manamadhya, epudu chala Miss avthuna I strongly needs your presence. Nuv chepinantha easy kadhu kotha valani parichayam cheskovdam,  ayina avriki interest and kali vuntadi chepu  mana gurinchi patinchukodaniki, your relation is the best for me. No one can replace it. Chalane chedham anukuna nee birthday ki but the distance and time kudaratledhu everyday chala hectic ga vuntundi asala aedhi avaledhu edho edhi chinna wish anthe hope you liked it.<br> 
-Chadvulo padi health padu cheskoku, time ki thinnu , time ki padko , water thagu and health jagratha aslaa patinchukuntaledhu nuv. Ila ayithe I hate you ♾️.<br>
-Inka chala chepali neetho time vunte call chey , chala vishayalu matladali ok naa....!<br>
-Ti-Aimo > 3000......<br>
+        <div class="love-text">Oye bangaram 🐷,<br><br>
+It's been a year without you, but still edho recent gane manam school nunchi velinatu vundi neetho vunna memories alantivi, but sudden ga intha distance perigipothundi anukole manamadhya, epudu chala Miss avthuna I strongly needs your presence. Nuv chepinantha easy kadhu kotha valani parichayam cheskovdam,  ayina avriki interest and kali vuntadi chepu  mana gurinchi patinchukodaniki, your relation is the best for me. No one can replace it. Chalane chedham anukuna nee birthday ki but the distance and time kudaratledhu everyday chala hectic ga vuntundi asala aedhi avaledhu edho edhi chinna wish anthe hope you liked it.<br><br> 
+Chadvulo padi health padu cheskoku, time ki thinnu , time ki padko , water thagu and health jagratha aslaa patinchukuntaledhu nuv. Ila ayithe I hate you ♾️.<br><br>
+Inka chala chepali neetho time vunte call chey , chala vishayalu matladali ok naa....!<br><br>
+Ti-Aimo > 3000......<br><br>
 Your's 🐻‍❄️.<br></div>
         <div class="placeholder-sub">AS_VEER</div>
       </div>
@@ -647,7 +780,18 @@ Your's 🐻‍❄️.<br></div>
 
   <script>
     (function(){
-      // ---------- STEP 1: Calendar display (current time & date in IST) ----------
+      // ---------- CLICK HEART EFFECT ----------
+      document.addEventListener('click', function(e) {
+        const heart = document.createElement('div');
+        heart.className = 'click-heart';
+        heart.innerHTML = ['❤️', '💛', '💜', '🩷', '💖', '💗', '💓'][Math.floor(Math.random() * 7)];
+        heart.style.left = e.clientX + 'px';
+        heart.style.top = e.clientY + 'px';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 1500);
+      });
+
+      // ---------- STEP MANAGEMENT WITH SLOWER TRANSITION ----------
       const step1 = document.getElementById('step1');
       const step2 = document.getElementById('step2');
       const step3 = document.getElementById('step3');
@@ -678,8 +822,8 @@ Your's 🐻‍❄️.<br></div>
         const year = istNow.getFullYear();
         dateEl.innerText = `${day}-${month}-${year}`;
 
-        // Unlock on Feb 23 (month=2, day=23) — set to 21 for testing
-        if (istNow.getMonth() === 1 && istNow.getDate() === 22) {
+        // For testing - force show fire screen (remove or change date for production)
+        if (istNow.getMonth() === 1 && istNow.getDate() === 23) {
           if (!step1.classList.contains('hidden-step')) {
             goToStep(step1, step2);
             initFirecracker();
@@ -688,47 +832,296 @@ Your's 🐻‍❄️.<br></div>
       }
 
       function goToStep(hideStep, showStep) {
-        hideStep.classList.add('hidden-step');
-        showStep.classList.remove('hidden-step');
+        // Add disappearing effect
+        hideStep.style.opacity = '0';
+        hideStep.style.transform = 'translateY(-20px) scale(0.95)';
         
-        // Start memory popups when step5 is shown
-        if (showStep === step5) {
-          startMemoryPopups();
-        }
-        
-        // Stop memory popups when leaving step5
-        if (hideStep === step5) {
-          stopMemoryPopups();
-        }
+        setTimeout(() => {
+          hideStep.classList.add('hidden-step');
+          hideStep.style.opacity = '';
+          hideStep.style.transform = '';
+          
+          showStep.classList.remove('hidden-step');
+          
+          // Start memory popups when step5 is shown
+          if (showStep === step5) {
+            startMemoryPopups();
+            initInfiniteCarousel();
+          }
+          
+          // Stop memory popups when leaving step5
+          if (hideStep === step5) {
+            stopMemoryPopups();
+          }
+        }, 600); // Slower transition
       }
 
       setInterval(updateCalendar, 1000);
       updateCalendar();
 
-      // ---------- MEMORY POPUPS ----------
+      // ---------- INFINITE CAROUSEL ----------
+      const imageFiles = [
+        'img1.jpg', 'img2.jpg', 'img3.jpg', 'img4.jpg', 'img5.jpg',
+        'img6.jpg', 'img7.jpg', 'img8.jpg', 'img9.jpg', 'img10.jpg',
+        'img11.jpg', 'img12.jpg', 'img13.jpg', 'img14.jpg', 'img15.jpg',
+        'img16.jpg', 'img17.jpg', 'img18.jpg'
+      ];
+
+      function initInfiniteCarousel() {
+        const track = document.getElementById('carouselTrack');
+        if (!track || track.children.length > 0) return;
+
+        // Add images three times for seamless infinite loop
+        for (let i = 0; i < 3; i++) {
+          imageFiles.forEach((src, index) => {
+            const item = document.createElement('div');
+            item.className = 'carousel-item';
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = `memory ${index + 1}`;
+            img.loading = 'lazy';
+            item.appendChild(img);
+            track.appendChild(item);
+          });
+        }
+
+        // Center detection
+        const items = document.querySelectorAll('.carousel-item');
+        
+        function updateCenter() {
+          if (!track) return;
+          const trackRect = track.getBoundingClientRect();
+          const centerX = trackRect.left + trackRect.width/2;
+          let closest = null, minDist = Infinity;
+          
+          items.forEach(item => {
+            const rect = item.getBoundingClientRect();
+            const itemCenter = rect.left + rect.width/2;
+            const dist = Math.abs(itemCenter - centerX);
+            if (dist < minDist) { minDist = dist; closest = item; }
+          });
+          
+          items.forEach(i => i.classList.remove('active-center'));
+          if (closest) closest.classList.add('active-center');
+
+          // Infinite scroll - reset when near edges
+          if (track.scrollLeft < 100) {
+            track.scrollLeft = track.scrollWidth / 3;
+          } else if (track.scrollLeft > track.scrollWidth * 2/3 - 100) {
+            track.scrollLeft = track.scrollWidth / 3;
+          }
+        }
+
+        setTimeout(updateCenter, 200);
+        track.addEventListener('scroll', updateCenter);
+        window.addEventListener('resize', updateCenter);
+
+        // Navigation buttons
+        document.getElementById('prevBtn').addEventListener('click', ()=>{
+          track.scrollBy({ left: -300, behavior: 'smooth' });
+        });
+        document.getElementById('nextBtn').addEventListener('click', ()=>{
+          track.scrollBy({ left: 300, behavior: 'smooth' });
+        });
+      }
+
+      // ---------- FIRECRACKER EXPLOSIONS WITH SOUND ----------
+      function initFirecracker() {
+        const canvas = document.getElementById('fireCanvas');
+        if (!canvas) {
+          console.log('Canvas not found, using fallback confetti');
+          startFallbackConfetti();
+          return;
+        }
+        
+        const ctx = canvas.getContext('2d');
+        let w, h;
+        
+        function resizeCanvas() {
+          const parent = canvas.parentElement;
+          if (!parent) return;
+          w = parent.offsetWidth;
+          h = parent.offsetHeight;
+          canvas.width = w;
+          canvas.height = h;
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        let particles = [];
+        const colors = ['#FFC107', '#FF5722', '#FF4081', '#E040FB', '#FFD700', '#FF8A65', '#FF5252', '#FF69B4', '#00FFFF', '#7B68EE', '#FFA500', '#DC143C'];
+
+        // Create explosion at random positions
+        function createExplosion(centerX, centerY, isBig = false) {
+          const count = isBig ? 60 : 30;
+          for (let i = 0; i < count; i++) {
+            const angle = Math.random() * 2 * Math.PI;
+            const speed = (isBig ? 5 : 3) + Math.random() * 8;
+            const vx = Math.cos(angle) * speed;
+            const vy = Math.sin(angle) * speed;
+            particles.push({
+              x: centerX, y: centerY, 
+              vx: vx, vy: vy, 
+              life: 1.0,
+              color: colors[Math.floor(Math.random() * colors.length)],
+              size: (isBig ? 8 : 5) + Math.random() * 10
+            });
+          }
+          
+          // Add visual firecracker pop
+          createFirecrackerPop(centerX, centerY);
+        }
+
+        // Create firecracker pop effect
+        function createFirecrackerPop(x, y) {
+          const pop = document.createElement('div');
+          pop.className = 'firecracker-pop';
+          pop.innerHTML = ['🧨', '💥', '✨', '🎈'][Math.floor(Math.random() * 4)];
+          pop.style.left = x + 'px';
+          pop.style.top = y + 'px';
+          pop.style.position = 'fixed';
+          pop.style.fontSize = (3 + Math.random() * 2) + 'rem';
+          document.body.appendChild(pop);
+          setTimeout(() => pop.remove(), 800);
+        }
+
+        // Initial big explosions
+        setTimeout(() => {
+          if (w && h) {
+            for (let i = 0; i < 8; i++) {
+              setTimeout(() => {
+                const x = w * (0.1 + Math.random() * 0.8);
+                const y = h * (0.1 + Math.random() * 0.8);
+                createExplosion(x, y, true);
+              }, i * 200);
+            }
+          }
+        }, 100);
+
+        let lastTimestamp = 0;
+        function animate(timestamp) {
+          const parent = canvas.parentElement;
+          if (!parent || !parent.classList.contains('fire-screen') || parent.classList.contains('hidden-step')) {
+            return;
+          }
+          
+          ctx.clearRect(0, 0, w, h);
+          
+          // Create new explosions periodically
+          if (timestamp - lastTimestamp > 200) {
+            lastTimestamp = timestamp;
+            if (w && h) {
+              const x = w * (0.1 + Math.random() * 0.8);
+              const y = h * (0.1 + Math.random() * 0.8);
+              createExplosion(x, y, Math.random() > 0.7);
+            }
+          }
+
+          // Update and draw particles
+          for (let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.08; // gravity
+            p.vx *= 0.99; // air resistance
+            p.life -= 0.008;
+            
+            if (p.life <= 0.02 || p.y > h + 100 || p.x < -100 || p.x > w + 100) {
+              particles.splice(i, 1);
+              continue;
+            }
+            
+            ctx.globalAlpha = p.life;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size * p.life, 0, 2 * Math.PI);
+            ctx.fillStyle = p.color;
+            ctx.fill();
+            
+            // Add sparkle effect
+            ctx.beginPath();
+            ctx.arc(p.x - 2, p.y - 2, (p.size * p.life) * 0.3, 0, 2 * Math.PI);
+            ctx.fillStyle = 'white';
+            ctx.globalAlpha = p.life * 0.5;
+            ctx.fill();
+          }
+          
+          requestAnimationFrame(animate);
+        }
+        
+        requestAnimationFrame(animate);
+        
+        // Also start fallback confetti as backup
+        startFallbackConfetti();
+      }
+
+      // Fallback confetti using DOM elements
+      function startFallbackConfetti() {
+        const colors = ['#FFC107', '#FF5722', '#FF4081', '#E040FB', '#FFD700', '#FF8A65', '#FF5252', '#FF69B4'];
+        
+        for (let i = 0; i < 50; i++) {
+          setTimeout(() => {
+            if (!step2.classList.contains('hidden-step')) {
+              createFallingConfetti();
+            }
+          }, i * 80);
+        }
+        
+        const confettiInterval = setInterval(() => {
+          if (!step2.classList.contains('hidden-step')) {
+            createFallingConfetti();
+          } else {
+            clearInterval(confettiInterval);
+          }
+        }, 200);
+        
+        function createFallingConfetti() {
+          const confetti = document.createElement('div');
+          confetti.style.position = 'fixed';
+          confetti.style.left = Math.random() * 100 + '%';
+          confetti.style.top = '-10px';
+          confetti.style.width = (8 + Math.random() * 8) + 'px';
+          confetti.style.height = (8 + Math.random() * 8) + 'px';
+          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+          confetti.style.zIndex = '9999';
+          confetti.style.pointerEvents = 'none';
+          confetti.style.boxShadow = '0 0 15px currentColor';
+          confetti.style.animation = `fallConfetti ${2 + Math.random() * 4}s linear forwards`;
+          confetti.style.opacity = '0.8';
+          document.body.appendChild(confetti);
+          
+          setTimeout(() => {
+            if (confetti.parentNode) confetti.remove();
+          }, 6000);
+        }
+        
+        // Add keyframe animation if not exists
+        if (!document.querySelector('#confetti-style')) {
+          const style = document.createElement('style');
+          style.id = 'confetti-style';
+          style.textContent = `
+            @keyframes fallConfetti {
+              0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+              100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+            }
+          `;
+          document.head.appendChild(style);
+        }
+      }
+
+      // ---------- DRAGGABLE MEMORY POPUPS ----------
       let memoryInterval = null;
       
       const memoryMessages = [
-        "12th Aug🥰",
-        "Computer Lab sitting🤫",
-        "that choclate pass-ons 😊",
-        "My stationary box🤓",
-        "those Ice-Creams 🍦",
-        "When you held my hand 🤍",
-        "polar Bear 🐻‍❄️",
-        "our calling sign 😄",
-        "piggu 🐷🐽",
-        "Your presence ",
-        "Ti-Aimo>30000 🩷",
-        "Our inside jokes 🤫",
-        "You make everything better",
-        "So many hurtings 😤",
-        "AS_VEER ✨",
-        "Those waitings💫",
-        "When you fell asleep on my hand",
-        "our lovable conversations💌",
-        "That time we got lost 🗺️",
-        "Every moment with you"
+        "12th Aug 🥰", "Computer Lab sitting 🤫", "that choclate pass-ons 😊",
+        "My stationary box 🤓", "those Ice-Creams 🍦", "When you held my hand 🤍",
+        "polar Bear 🐻‍❄️", "our calling sign 😄", "piggu 🐷🐽",
+        "Your presence ✨", "Ti-Aimo>30000 🩷", "Our inside jokes 🤫",
+        "You make everything better 💫", "So many hurtings 😤", "AS_VEER 💕",
+        "Those waitings 💫", "When you fell asleep on my hand 😴",
+        "our lovable conversations 💌", "That time we got lost 🗺️",
+        "Every moment with you ❤️", "Computer lab secrets 🤫", "Your smile 😊"
       ];
 
       function createMemoryPopup() {
@@ -743,15 +1136,74 @@ Your's 🐻‍❄️.<br></div>
         
         popup.style.left = left + '%';
         popup.style.top = top + '%';
-        popup.style.position = 'fixed';
         
         const rotate = (Math.random() - 0.5) * 8;
         popup.style.transform = `rotate(${rotate}deg)`;
         
+        // Make it draggable
+        let isDragging = false;
+        let startX, startY, startLeft, startTop;
+
+        popup.addEventListener('mousedown', startDrag);
+        popup.addEventListener('touchstart', startDrag, { passive: false });
+
+        function startDrag(e) {
+          e.preventDefault();
+          isDragging = true;
+          popup.classList.add('dragging');
+          
+          const clientX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
+          const clientY = e.type === 'mousedown' ? e.clientY : e.touches[0].clientY;
+          
+          startX = clientX;
+          startY = clientY;
+          
+          const rect = popup.getBoundingClientRect();
+          startLeft = rect.left;
+          startTop = rect.top;
+          
+          popup.style.left = startLeft + 'px';
+          popup.style.top = startTop + 'px';
+          popup.style.position = 'fixed';
+        }
+
+        function onDrag(e) {
+          if (!isDragging) return;
+          e.preventDefault();
+          
+          const clientX = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
+          const clientY = e.type === 'mousemove' ? e.clientY : e.touches[0].clientY;
+          
+          const dx = clientX - startX;
+          const dy = clientY - startY;
+          
+          popup.style.left = (startLeft + dx) + 'px';
+          popup.style.top = (startTop + dy) + 'px';
+        }
+
+        function stopDrag() {
+          if (isDragging) {
+            isDragging = false;
+            popup.classList.remove('dragging');
+          }
+        }
+
+        document.addEventListener('mousemove', onDrag);
+        document.addEventListener('mouseup', stopDrag);
+        document.addEventListener('touchmove', onDrag, { passive: false });
+        document.addEventListener('touchend', stopDrag);
+        
         document.body.appendChild(popup);
         
+        // Remove after animation
         setTimeout(() => {
-          if (popup.parentNode) popup.remove();
+          if (popup.parentNode) {
+            document.removeEventListener('mousemove', onDrag);
+            document.removeEventListener('mouseup', stopDrag);
+            document.removeEventListener('touchmove', onDrag);
+            document.removeEventListener('touchend', stopDrag);
+            popup.remove();
+          }
         }, 4000);
       }
 
@@ -770,73 +1222,7 @@ Your's 🐻‍❄️.<br></div>
         }
       }
 
-      // ---------- firecracker animation ----------
-      function initFirecracker() {
-        const canvas = document.getElementById('fireCanvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        let w, h;
-        function resizeCanvas() {
-          const parent = canvas.parentElement;
-          if (!parent) return;
-          w = parent.offsetWidth;
-          h = parent.offsetHeight;
-          canvas.width = w;
-          canvas.height = h;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        let particles = [];
-        const colors = ['#FFC107', '#FF5722', '#FF4081', '#E040FB', '#FFD700', '#FF8A65', '#FF5252'];
-
-        function createExplosion(centerX, centerY) {
-          for (let i = 0; i < 30; i++) {
-            const angle = Math.random() * 2 * Math.PI;
-            const speed = 3 + Math.random() * 6;
-            const vx = Math.cos(angle) * speed;
-            const vy = Math.sin(angle) * speed;
-            particles.push({
-              x: centerX, y: centerY, vx, vy, life: 1.0,
-              color: colors[Math.floor(Math.random() * colors.length)],
-              size: 5 + Math.random() * 8
-            });
-          }
-        }
-
-        let lastTimestamp = 0;
-        function animate(timestamp) {
-          const parent = canvas.parentElement;
-          if (!parent) return;
-          ctx.clearRect(0, 0, w, h);
-          
-          if (timestamp - lastTimestamp > 300) {
-            lastTimestamp = timestamp;
-            createExplosion(w * (0.3 + Math.random() * 0.4), h * (0.2 + Math.random() * 0.6));
-          }
-
-          for (let i = particles.length - 1; i >= 0; i--) {
-            const p = particles[i];
-            p.x += p.vx;
-            p.y += p.vy;
-            p.vy += 0.08;
-            p.life -= 0.008;
-            if (p.life <= 0.02 || p.y > h + 50) {
-              particles.splice(i, 1);
-              continue;
-            }
-            ctx.globalAlpha = p.life;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size * p.life, 0, 2 * Math.PI);
-            ctx.fillStyle = p.color;
-            ctx.fill();
-          }
-          requestAnimationFrame(animate);
-        }
-        requestAnimationFrame(animate);
-      }
-
-      // Button event listeners
+      // ---------- BUTTON EVENT LISTENERS ----------
       document.getElementById('fireNextBtn').addEventListener('click', ()=>{
         goToStep(step2, step3);
       });
@@ -845,18 +1231,17 @@ Your's 🐻‍❄️.<br></div>
         goToStep(step3, step4);
       });
 
-      // name validation
+      // Name validation with Enter key
       const nameInput = document.getElementById('nameInput');
       const nameError = document.getElementById('nameError');
       const validateBtn = document.getElementById('validateNameBtn');
 
-      validateBtn.addEventListener('click', ()=>{
+      function validateName() {
         const val = nameInput.value.trim();
         if (val.toLowerCase() === 'pandu' || val.toLowerCase() === 'polarbear' || val.toLowerCase() === 'polar bear') {
           goToStep(step4, step5);
           for (let i=0;i<8;i++){ setTimeout(()=>{createConfetti('#ffb0f0');}, i*70); }
           
-          // Play music when entering carousel
           setTimeout(() => {
             const audio = document.getElementById('bgMusic');
             if (audio) {
@@ -864,7 +1249,15 @@ Your's 🐻‍❄️.<br></div>
             }
           }, 500);
         } else {
-          nameError.innerText = '❌ I think i was your favorite😒😔';
+          nameError.innerText = '❌ I think i was your favorite 😒😔';
+        }
+      }
+
+      validateBtn.addEventListener('click', validateName);
+      nameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          validateName();
         }
       });
 
@@ -878,50 +1271,20 @@ Your's 🐻‍❄️.<br></div>
         }, 300);
       });
 
-      // carousel center detection
-      const track = document.getElementById('carouselTrack');
-      const items = document.querySelectorAll('.carousel-item');
-      function updateCenter() {
-        if (!track) return;
-        const trackRect = track.getBoundingClientRect();
-        const centerX = trackRect.left + trackRect.width/2;
-        let closest = null, minDist = Infinity;
-        items.forEach(item => {
-          const rect = item.getBoundingClientRect();
-          const itemCenter = rect.left + rect.width/2;
-          const dist = Math.abs(itemCenter - centerX);
-          if (dist < minDist) { minDist = dist; closest = item; }
-        });
-        items.forEach(i => i.classList.remove('active-center'));
-        if (closest) closest.classList.add('active-center');
-      }
-      setTimeout(updateCenter,200);
-      track.addEventListener('scroll', updateCenter);
-      window.addEventListener('resize', updateCenter);
-
-      document.getElementById('prevBtn').addEventListener('click', ()=>{
-        track.scrollBy({ left: -280, behavior: 'smooth' });
-      });
-      document.getElementById('nextBtn').addEventListener('click', ()=>{
-        track.scrollBy({ left: 280, behavior: 'smooth' });
-      });
-
       // open/close letter with toggle button
-const openBtn = document.getElementById('openLetterBtn');
-const letterMsg = document.getElementById('letterMessage');
+      const openBtn = document.getElementById('openLetterBtn');
+      const letterMsg = document.getElementById('letterMessage');
 
-openBtn.addEventListener('click', ()=>{
-  letterMsg.classList.toggle('show');
-  
-  // Change button text based on state
-  if (letterMsg.classList.contains('show')) {
-    openBtn.textContent = 'Close Letter';
-    // Confetti when opening
-    for (let i=0;i<6;i++){ setTimeout(()=>{createConfetti('#dba56d');}, i*90); }
-  } else {
-    openBtn.textContent = 'Open Letter';
-  }
-});
+      openBtn.addEventListener('click', ()=>{
+        letterMsg.classList.toggle('show');
+        
+        if (letterMsg.classList.contains('show')) {
+          openBtn.textContent = 'Close Letter';
+          for (let i=0;i<6;i++){ setTimeout(()=>{createConfetti('#dba56d');}, i*90); }
+        } else {
+          openBtn.textContent = 'Open Letter';
+        }
+      });
 
       function createConfetti(color) {
         const dot = document.createElement('div');
@@ -932,9 +1295,18 @@ openBtn.addEventListener('click', ()=>{
         document.body.appendChild(dot);
         setTimeout(()=> dot.remove(), 800);
       }
+
+      // Initialize firecracker when step2 becomes visible
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.target === step2 && !step2.classList.contains('hidden-step')) {
+            initFirecracker();
+          }
+        });
+      });
+      
+      observer.observe(step2, { attributes: true, attributeFilter: ['class'] });
     })();
   </script>
 </body>
 </html>
-
-
